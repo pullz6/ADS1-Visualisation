@@ -23,15 +23,52 @@ def price_to_gbp(price):
 
 def numeric_five_star(five_star,total_reviews): 
     list_five_star = []
+    avg = five_star.mean()
+    for i in five_star.index: 
+        if five_star[i] > avg: 
+            list_five_star.append("High")
+        elif five_star[i] < avg: 
+            list_five_star.append("low") 
+        else: 
+            list_five_star.append("avg")
+    return list_five_star
     
-    
-    
+def numeric_four_star(four_star,total_reviews): 
+    list_four_star = []
+    for i in four_star.index: 
+        four_star_value = four_star[i] * total_reviews[i]
+        list_four_star.append(four_star_value)
+    return list_four_star
+
+def numeric_three_star(three_star,total_reviews): 
+    list_three_star = []
+    for i in four_star.index: 
+        three_star_value = three_star[i] * total_reviews[i]
+        list_three_star.append(three_star_value)
+    return list_three_star
+
+def numeric_two_star(two_star,total_reviews): 
+    list_two_star = []
+    for i in two_star.index: 
+        two_star_value = two_star[i] * total_reviews[i]
+        list_two_star.append(two_star_value)
+    return list_two_star
+
+def numeric_one_star(one_star,total_reviews): 
+    list_one_star = []
+    for i in one_star.index: 
+        one_star_value = one_star[i] * total_reviews[i]
+        list_one_star.append(one_star_value)
+    return list_one_star
 
 #Main Programme
 #===========================================================================
 #Extracting required data and including them into variables 
 df_amazonbooks = pd.read_csv('final_book_dataset_kaggle.csv')
+df_amazonbooks.dropna(axis=0, how='any', thresh=0, subset=None, inplace=True)
+df_amazonbooks.dropna(subset=['star5','star4','star3','star2','star1'])
 df_amazonbooks.sort_values("n_reviews", inplace = True)
+print(df_amazonbooks['star2'])
 #Prices for books
 price = df_amazonbooks['price']
 #Number of pages in the book 
@@ -39,21 +76,17 @@ pages = df_amazonbooks['pages']
 #The average rating of the book
 rating = df_amazonbooks['avg_reviews']
 #The number of 5 star ratings 
-five_star = rating = df_amazonbooks['star5']
-print(df_amazonbooks['star5'].dtypes)
-print(five_star) 
+five_star  = df_amazonbooks['star5']
 #The number of 4 star ratings 
-four_star = rating = df_amazonbooks['star4']
-print(df_amazonbooks['star4'].dtypes)
+four_star = df_amazonbooks['star4']
 #The number of 3 star ratings 
-three_star = rating = df_amazonbooks['star3']
+three_star = df_amazonbooks['star3']
 #The number of 2 star ratings
-two_star = rating = df_amazonbooks['star2']
+two_star = df_amazonbooks['star2']
 #The number of 1 star ratings
-one_star = rating = df_amazonbooks['star1']
+one_star  = df_amazonbooks['star1']
 #The number of reviews provided 
 no_reviews = df_amazonbooks['n_reviews']
-print(df_amazonbooks['n_reviews'].dtypes)
 
 #Visualisation 
 #Plotting a line graph 
@@ -74,8 +107,15 @@ fig.tight_layout()
 plt.show()
 
 
-#Plotting a a histogram 
-data = [five_star,four_star,three_star,two_star,one_star]
+#Plotting a a histogram
+ 
+data = []
+data.append(numeric_five_star(five_star, no_reviews))
+data.append(numeric_four_star(four_star, no_reviews))
+data.append(numeric_three_star(three_star, no_reviews))
+data.append(numeric_two_star(two_star, no_reviews))
+data.append(numeric_one_star(one_star, no_reviews))
+print(data)
 labels = ["5 Star Rating","4 Star Rating","3 Star Rating","2 Star Rating","1 Star Rating"]
 plt.figure()
 plt.subplots_adjust(hspace=0.6, wspace=0.6)
@@ -98,3 +138,4 @@ ax.set_xticklabels(labels)
 plt.ylabel("Ranges")
 plt.savefig("violines.png")
 plt.show()
+
