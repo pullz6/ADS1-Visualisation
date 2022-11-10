@@ -25,7 +25,7 @@ def func_price_per_page(page,price):
     for i in page.index: 
         temp = page[i]/price[i]
         price_per_page.append(temp)
-    return price_per_page
+    return price_per_page 
     
 
 def func_five_star(five_star,total_reviews): 
@@ -123,7 +123,7 @@ def numeric_one_star(one_star,total_reviews):
     for i in one_star.index: 
         one_star_value = one_star[i] * total_reviews[i]
         list_one_star.append(one_star_value)
-    return list_one_star
+    return list_one_star 
 
 #Main Programme
 #===========================================================================
@@ -131,7 +131,6 @@ def numeric_one_star(one_star,total_reviews):
 df_amazonbooks = pd.read_csv('final_book_dataset_kaggle.csv')
 df_amazonbooks.dropna(axis=0, how='any', thresh=0, subset=None, inplace=True)
 df_amazonbooks.sort_values("n_reviews", inplace = True)
-print(df_amazonbooks['star2'])
 #Prices for books
 price = df_amazonbooks['price']
 #Number of pages in the book 
@@ -170,7 +169,7 @@ fig.tight_layout()
 plt.show()
 
 
-#Plotting a a histogram
+#Plotting a scatter graph 
 plt.figure()
 price_per_page = func_price_per_page(pages, price)
 plt.scatter(rating,price_per_page)
@@ -187,7 +186,6 @@ data.append(func_four_star(four_star, no_reviews))
 data.append(func_three_star(three_star, no_reviews))
 data.append(func_two_star(two_star, no_reviews))
 data.append(func_one_star(one_star, no_reviews))
-print(data)
 
 
 labels = ["5 Star Rating","4 Star Rating","3 Star Rating","2 Star Rating","1 Star Rating"]
@@ -245,3 +243,18 @@ plt.show()
 
 
 #plt.show()
+
+#Plotting a boxplot 
+data = []
+data.append(numeric_five_star(five_star, no_reviews))
+data.append(numeric_four_star(four_star, no_reviews))
+data.append(numeric_three_star(three_star, no_reviews))
+data.append(numeric_two_star(two_star, no_reviews))
+data.append(numeric_one_star(one_star, no_reviews))
+
+plt.figure()
+plt.boxplot(data)
+plt.ylabel("")
+#plt.savefig("box.png")
+plt.show()
+
